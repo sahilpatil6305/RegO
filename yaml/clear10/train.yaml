@@ -1,0 +1,72 @@
+base:
+  data_folder_path: 'dataset/release_in_the_wild'  # Use all datasets
+  data_train_path: ''  # Empty to use data_folder_path
+  data_test_path: ''   # Empty to use data_folder_path
+  feature_path: 'dataset/release_in_the_wild'
+  class_list: 'real fake' # Real: 0; Fake: 1
+  use_all_datasets: True  # Use dataset1, dataset2, dataset3
+
+model:
+  pre_dataset: "moco"
+  pre_net: "resnet50"
+
+# model:
+#   pre_dataset: "imagenet"
+#   pre_net: "resnet50"
+
+training:
+  # The number in the end of each method is the ratio that used in train/test datasets
+  # method : 'LwF Replay  Reservoir BiasReservoir_Fixed_reset_0.2 BiasReservoir_Dynamic_1.0 ' 
+  # method : 'Naive EWC LwF Reservoir CWRStar'
+  # method : 'Elma'
+  method: 'Naive'
+  split : 'wav2vec'
+  restart : '0' # If restart = 1, clear all old checkpoints
+  timestamp : 8
+  num_classes : 2
+  num_instance_each_class : 1000
+  num_instance_each_class_test : 2500
+  load_prev: False # whether load ckpt of the previous methods 
+  eval: False
+
+image_train:
+  image_train_model_arch: 'resnet50' 
+  image_train_pretrain: True
+  image_train_attribute: ''
+
+feature_train:
+  # pretrain_feature : 'fadcl_wav2vec_feature'
+  # pretrain_feature: 'fadcl_wav2vec'
+  pretrain_feature: 'moco_resnet50_clear_10_feature'
+  pretrain_feature_shape: 1024
+  
+
+parameter:
+  nepoch : 5
+  batch_size : 32
+  step_schedular_decay : 600
+  schedular_step : 1
+  start_lr : 0.00001
+  momentum : 0.9
+  weight_decay : 0
+  seed: 655211
+  test_split : 0.3
+  buffer_ratio : 1.0 # The ratio of data will be append to data buffer used for Replay/GDumb*/*Reservoir/AGEM*/CoPE
+  max_memory_size : 2000 # Max Data Num in Buffer 
+  layer_num: 4
+  hidden_dim: 512
+  dropout: 0
+  
+llm_optimization:
+  enable: True
+  asr_model: "openai/whisper-tiny"
+  llm_model: "llama3.2"
+  semantic_loss_weight: 0.1
+  ot_loss_weight: 0.1
+  region_ot_weight: 0.05
+  ot_reg: 0.05
+  ot_iters: 50
+  ot_drift_threshold: 0.2
+  region_buffer_size: 1000
+
+  
