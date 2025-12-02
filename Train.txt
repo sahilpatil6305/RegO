@@ -1,0 +1,14 @@
+
+## Command to run:
+
+
+
+# Activate environment:
+
+.\rego-env\Scripts\activate
+
+
+
+# Run training:
+
+python train.py --yaml yaml/clear10/train.yaml
